@@ -1,65 +1,161 @@
-import Image from "next/image";
+/* Landing page — hero, signup form, how-it-works, payment rail footer */
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function LandingPage() {
+  const router = useRouter();
+  const [storeName, setStoreName] = useState("");
+  const [storeUrl, setStoreUrl] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          store_name: storeName,
+          store_url: storeUrl,
+          email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+        return;
+      }
+
+      router.push(`/success/${data.slug}`);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-white">
+      {/* Nav */}
+      <nav className="max-w-4xl mx-auto px-8 py-6 flex items-center justify-between">
+        <span className="text-xl font-bold tracking-tight">AgentCheckout</span>
+        <a
+          href="/try/demo"
+          className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+        >
+          Try the demo &rarr;
+        </a>
+      </nav>
+
+      {/* Hero */}
+      <section className="max-w-4xl mx-auto px-8 pt-16 pb-12">
+        <h1 className="text-5xl font-bold tracking-tight leading-tight">
+          Make your D2C store
+          <br />
+          <span className="underline decoration-2 underline-offset-4">
+            agent-shoppable
+          </span>{" "}
+          in 10 minutes.
+        </h1>
+        <p className="mt-6 text-lg text-gray-600 max-w-2xl">
+          One script tag. ChatGPT, Claude, and every AI agent can now discover
+          your products and check out on your store.
+        </p>
+      </section>
+
+      {/* Signup form */}
+      <section className="max-w-4xl mx-auto px-8 pb-20">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-md space-y-4"
+        >
+          <input
+            type="text"
+            placeholder="Store name"
+            value={storeName}
+            onChange={(e) => setStoreName(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          />
+          <input
+            type="url"
+            placeholder="Store URL (https://...)"
+            value={storeUrl}
+            onChange={(e) => setStoreUrl(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          />
+          <input
+            type="email"
+            placeholder="Your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white py-3 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {loading
+              ? "Setting up..."
+              : "Make my store agent-shoppable \u2192"}
+          </button>
+          {error && (
+            <p className="text-red-600 text-sm">{error}</p>
+          )}
+        </form>
+      </section>
+
+      {/* How it works */}
+      <section className="max-w-4xl mx-auto px-8 pb-20">
+        <h2 className="text-2xl font-bold mb-8">How it works</h2>
+        <div className="grid grid-cols-3 gap-8">
+          <div className="border border-gray-200 rounded-lg p-6">
+            <h3 className="font-semibold mb-2">Discovery</h3>
+            <p className="text-sm text-gray-600">
+              Agents find your products by query, category, or price via a
+              hosted MCP endpoint.
+            </p>
+          </div>
+          <div className="border border-gray-200 rounded-lg p-6">
+            <h3 className="font-semibold mb-2">Transaction</h3>
+            <p className="text-sm text-gray-600">
+              Agents add to cart and complete checkout through your existing
+              payment processor.
+            </p>
+          </div>
+          <div className="border border-gray-200 rounded-lg p-6">
+            <h3 className="font-semibold mb-2">Zero Re-platform</h3>
+            <p className="text-sm text-gray-600">
+              Works with Shopify, WooCommerce, custom builds. One script tag.
+              No migration.
+            </p>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Payment rail footer */}
+      <footer className="max-w-4xl mx-auto px-8 py-10 border-t border-gray-100">
+        <p className="text-sm text-gray-400">
+          Payments powered by:{" "}
+          <span className="font-semibold text-gray-700">MoltPe</span>
+          {" · "}
+          <span className="text-gray-700">Razorpay</span>
+          {" · "}
+          <span className="text-gray-300">Stripe (soon)</span>
+        </p>
+      </footer>
     </div>
   );
 }
