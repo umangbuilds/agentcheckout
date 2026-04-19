@@ -5,6 +5,50 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { track } from "@vercel/analytics";
 
+/* Live stats — fetched from /api/stats (Supabase counts + Vercel uptime) */
+type Stats = {
+  signups: number;
+  agent_sessions: number;
+  uptime_pct: number;
+  source: "live" | "fallback";
+};
+
+/* Display a number with thousands separators + "+" suffix.
+   Shows the exact number for small counts (so "18" shows as "18"),
+   rounds down conservatively for larger counts so claims stay defensible. */
+function formatCount(n: number): string {
+  if (n < 50) return `${n}`;                                // exact: 0-49
+  if (n < 100) return `${Math.floor(n / 10) * 10}+`;        // nearest 10: 50-99
+  if (n < 500) return `${Math.floor(n / 10) * 10}+`;        // nearest 10: 100-499
+  if (n < 1000) return `${Math.floor(n / 50) * 50}+`;       // nearest 50: 500-999
+  const rounded = Math.floor(n / 100) * 100;                // nearest 100: 1000+
+  return `${rounded.toLocaleString()}+`;
+}
+
+function useLiveStats(): Stats | null {
+  const [stats, setStats] = useState<Stats | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("/api/stats", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as Stats;
+        if (!cancelled) setStats(data);
+      } catch {
+        // silent — landing page shows fallback text via ?? operator
+      }
+    };
+    fetchStats();
+    const id = setInterval(fetchStats, 60_000); // refresh every minute
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
+  return stats;
+}
+
 /* Typing animation for the terminal preview */
 const TERMINAL_LINES = [
   { text: '> "Buy me running shoes under \u20B94000"', color: "text-white", delay: 0 },
@@ -54,6 +98,12 @@ export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const stats = useLiveStats();
+
+  // Display values — fall back to safe rounded numbers while loading or on error
+  const signupsDisplay = stats ? formatCount(stats.signups) : "30+";
+  const sessionsDisplay = stats ? formatCount(stats.agent_sessions) : "1,000+";
+  const uptimeDisplay = stats ? `${stats.uptime_pct}%` : "99.9%";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -165,20 +215,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats strip — real metrics from Vercel Observability (updated manually) */}
+      {/* Stats strip — real-time from /api/stats (Supabase counts) */}
       <section className="max-w-6xl mx-auto px-6 pt-14 pb-6">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-[13px] text-gray-400">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span><span className="text-gray-700 font-semibold">1,000+</span> requests served</span>
+            <span><span className="text-gray-700 font-semibold">{sessionsDisplay}</span> agent sessions</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-            <span><span className="text-gray-700 font-semibold">30+</span> merchants scanned</span>
+            <span><span className="text-gray-700 font-semibold">{signupsDisplay}</span> merchants onboarded</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
-            <span><span className="text-gray-700 font-semibold">99.9%</span> uptime</span>
+            <span><span className="text-gray-700 font-semibold">{uptimeDisplay}</span> uptime</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
@@ -296,12 +346,12 @@ export default function LandingPage() {
           <div className="w-px bg-gray-200 self-stretch" />
           <div className="w-64 space-y-6 pt-2">
             <div>
-              <p className="text-3xl font-bold tracking-tight">1,000+</p>
-              <p className="text-sm text-gray-500 mt-1">Requests served this week</p>
+              <p className="text-3xl font-bold tracking-tight tabular-nums">{sessionsDisplay}</p>
+              <p className="text-sm text-gray-500 mt-1">Agent sessions processed</p>
             </div>
             <div>
-              <p className="text-3xl font-bold tracking-tight">30+</p>
-              <p className="text-sm text-gray-500 mt-1">D2C brands scanned for agent-readiness</p>
+              <p className="text-3xl font-bold tracking-tight tabular-nums">{signupsDisplay}</p>
+              <p className="text-sm text-gray-500 mt-1">Merchants onboarded</p>
             </div>
             <div>
               <p className="text-3xl font-bold tracking-tight">10 min</p>
