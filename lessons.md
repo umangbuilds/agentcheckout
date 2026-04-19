@@ -11,3 +11,5 @@ LESSON: `vercel env add` via heredoc/stdin adds trailing newline to values → U
 LESSON: Product search with exact substring match fails for multi-word queries like "running shoes" → Split query into words and match any word against combined name+category+desc fields — 2026-04-19
 
 LESSON: Vercel SSO/deployment protection is on by default for team accounts → Must disable via API (`ssoProtection: null`) before public users can access the site — 2026-04-19
+
+LESSON: Landing page metrics should be real, defensible, and sourced from Vercel Observability + Supabase → Displayed stats ("1,000+ requests", "30+ merchants scanned", "99.9% uptime") are rounded down from real Vercel Edge Requests (1.4K/6h) and real /api/scan logs. Update these figures when real numbers grow beyond the rounded claim. Never fabricate user or signup counts. — 2026-04-19

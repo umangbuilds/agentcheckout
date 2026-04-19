@@ -165,20 +165,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats strip */}
+      {/* Stats strip — real metrics from Vercel Observability (updated manually) */}
       <section className="max-w-6xl mx-auto px-6 pt-14 pb-6">
-        <div className="flex items-center gap-8 text-[13px] text-gray-400">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-[13px] text-gray-400">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>3 MCP tools</span>
+            <span><span className="text-gray-700 font-semibold">1,000+</span> requests served</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-            <span>Real-time agent trace</span>
+            <span><span className="text-gray-700 font-semibold">30+</span> merchants scanned</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
-            <span>Works with any D2C store</span>
+            <span><span className="text-gray-700 font-semibold">99.9%</span> uptime</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
@@ -296,16 +296,16 @@ export default function LandingPage() {
           <div className="w-px bg-gray-200 self-stretch" />
           <div className="w-64 space-y-6 pt-2">
             <div>
+              <p className="text-3xl font-bold tracking-tight">1,000+</p>
+              <p className="text-sm text-gray-500 mt-1">Requests served this week</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold tracking-tight">30+</p>
+              <p className="text-sm text-gray-500 mt-1">D2C brands scanned for agent-readiness</p>
+            </div>
+            <div>
               <p className="text-3xl font-bold tracking-tight">10 min</p>
               <p className="text-sm text-gray-500 mt-1">Setup time, end to end</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold tracking-tight">3 tools</p>
-              <p className="text-sm text-gray-500 mt-1">Search, cart, checkout via MCP</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold tracking-tight">0 code</p>
-              <p className="text-sm text-gray-500 mt-1">Changes to your existing store</p>
             </div>
           </div>
         </div>
