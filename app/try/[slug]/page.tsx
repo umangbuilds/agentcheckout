@@ -3,6 +3,7 @@
 
 import { useParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import { track } from "@vercel/analytics";
 
 interface OrderItem {
   product_id: string;
@@ -40,6 +41,7 @@ export default function TryPage() {
     setRunning(true);
     setLines([]);
     setOrder(null);
+    track("agent_run_started", { slug, query });
 
     try {
       const res = await fetch("/api/agent", {
@@ -76,6 +78,7 @@ export default function TryPage() {
               setLines((prev) => [...prev, ev.text]);
             } else if (ev.type === "order") {
               setOrder(ev.order);
+              track("agent_order_completed", { slug, order_id: ev.order.order_id, total: ev.order.total });
             } else if (ev.type === "agent_final") {
               setLines((prev) => [...prev, `[AGENT] ${ev.text}`]);
             } else if (ev.type === "error") {

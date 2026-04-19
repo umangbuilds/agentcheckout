@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@vercel/analytics";
 
 /* Typing animation for the terminal preview */
 const TERMINAL_LINES = [
@@ -70,6 +71,7 @@ export default function LandingPage() {
         setError(data.error || "Something went wrong");
         return;
       }
+      track("signup", { slug: data.slug, store_name: storeName });
       router.push(`/success/${data.slug}`);
     } catch {
       setError("Network error. Please try again.");
