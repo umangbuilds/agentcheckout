@@ -1,0 +1,13 @@
+# Lessons — AgentCheckout
+
+LESSON: Supabase client crashes at import time if env vars are placeholder strings → Use lazy initialization (function that creates client on first call) — 2026-04-19
+
+LESSON: Anthropic model IDs change between API key tiers; `claude-sonnet-4-5-20250514` doesn't exist on all keys → Always check `/v1/models` endpoint first to confirm available model IDs — 2026-04-19
+
+LESSON: Cloudflare proxy (orange cloud) breaks Vercel dynamic routes with 404 → Always use DNS-only (gray cloud) when pointing to Vercel via A record — 2026-04-19
+
+LESSON: `vercel env add` via heredoc/stdin adds trailing newline to values → Use `printf` without newline instead of `echo` or `<<<` — 2026-04-19
+
+LESSON: Product search with exact substring match fails for multi-word queries like "running shoes" → Split query into words and match any word against combined name+category+desc fields — 2026-04-19
+
+LESSON: Vercel SSO/deployment protection is on by default for team accounts → Must disable via API (`ssoProtection: null`) before public users can access the site — 2026-04-19
