@@ -1,4 +1,4 @@
-/* Landing page — hero, signup form, how-it-works, payment rail footer */
+/* Landing page — hero, signup form, testimonial, how-it-works, payment rail footer */
 "use client";
 
 import { useState } from "react";
@@ -44,7 +44,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white" style={{ minWidth: 900 }}>
       {/* Nav */}
       <nav className="max-w-4xl mx-auto px-8 py-6 flex items-center justify-between">
         <span className="text-xl font-bold tracking-tight">AgentCheckout</span>
@@ -57,11 +57,11 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-8 pt-16 pb-12">
+      <section className="max-w-4xl mx-auto px-8 pt-16 pb-8">
         <h1 className="text-5xl font-bold tracking-tight leading-tight">
           Make your D2C store
           <br />
-          <span className="underline decoration-2 underline-offset-4">
+          <span className="bg-black text-white px-3 py-1 inline-block mt-1">
             agent-shoppable
           </span>{" "}
           in 10 minutes.
@@ -72,12 +72,22 @@ export default function LandingPage() {
         </p>
       </section>
 
+      {/* Testimonial */}
+      <section className="max-w-4xl mx-auto px-8 pb-12">
+        <blockquote className="border-l-4 border-black pl-6 py-2 max-w-2xl">
+          <p className="text-gray-700 italic">
+            &ldquo;D2C founders are panicking about agentic commerce. This is
+            the fastest path to agent-readiness.&rdquo;
+          </p>
+          <footer className="mt-2 text-sm text-gray-500">
+            &mdash; Senior payments engineer, Bangalore
+          </footer>
+        </blockquote>
+      </section>
+
       {/* Signup form */}
       <section className="max-w-4xl mx-auto px-8 pb-20">
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-md space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="max-w-md space-y-4">
           <input
             type="text"
             placeholder="Store name"
@@ -111,9 +121,7 @@ export default function LandingPage() {
               ? "Setting up..."
               : "Make my store agent-shoppable \u2192"}
           </button>
-          {error && (
-            <p className="text-red-600 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-600 text-sm">{error}</p>}
         </form>
       </section>
 
@@ -150,9 +158,9 @@ export default function LandingPage() {
         <p className="text-sm text-gray-400">
           Payments powered by:{" "}
           <span className="font-semibold text-gray-700">MoltPe</span>
-          {" · "}
+          {" \u00B7 "}
           <span className="text-gray-700">Razorpay</span>
-          {" · "}
+          {" \u00B7 "}
           <span className="text-gray-300">Stripe (soon)</span>
         </p>
       </footer>
