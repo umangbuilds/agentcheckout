@@ -100,6 +100,12 @@ export default function LandingPage() {
             API Docs
           </a>
           <a
+            href="/scan"
+            className="text-[13px] text-gray-400 hover:text-gray-800 transition-colors"
+          >
+            Scanner
+          </a>
+          <a
             href="/try/demo"
             className="text-[13px] font-medium bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-all btn-shine"
           >
@@ -128,7 +134,13 @@ export default function LandingPage() {
           can discover your products and checkout.
         </p>
 
-        <div className="mt-10 flex items-center gap-4 animate-fade-up-4">
+        <div className="mt-8 animate-fade-up-3">
+          <a href="/scan" className="text-sm text-indigo-600 hover:text-indigo-800 underline underline-offset-2">
+            Free: scan your store&apos;s agent-readiness →
+          </a>
+        </div>
+
+        <div className="mt-6 flex items-center gap-4 animate-fade-up-4">
           <a
             href="#signup"
             className="inline-flex items-center gap-2 bg-black text-white px-7 py-3.5 rounded-xl text-sm font-medium hover:bg-gray-800 transition-all hover:shadow-xl hover:shadow-black/10 btn-shine"
@@ -393,6 +405,9 @@ export default function LandingPage() {
             </span>
           </div>
           <div className="flex items-center gap-6 text-[13px] text-gray-400">
+            <a href="/privacy" className="hover:text-gray-600 transition-colors">Privacy</a>
+            <a href="/terms" className="hover:text-gray-600 transition-colors">Terms</a>
+            <a href="mailto:hello@agentcheckout.app" className="hover:text-gray-600 transition-colors">Contact</a>
             <span>
               Payments:{" "}
               <span className="text-gray-600 font-medium">MoltPe</span>
