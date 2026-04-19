@@ -412,6 +412,12 @@ export default function LandingPage() {
               Payments:{" "}
               <span className="text-gray-600 font-medium">MoltPe</span>
               <span className="mx-1.5 text-gray-300">/</span>
+              <span className="text-gray-600">PineLabs</span>
+              <span className="mx-1.5 text-gray-300">/</span>
+              <span className="text-gray-600">Dodo Payments</span>
+              <span className="mx-1.5 text-gray-300">/</span>
+              <span className="text-gray-600">Cray</span>
+              <span className="mx-1.5 text-gray-300">/</span>
               <span className="text-gray-600">Razorpay</span>
               <span className="mx-1.5 text-gray-300">/</span>
               <span className="text-gray-300">Stripe (soon)</span>
