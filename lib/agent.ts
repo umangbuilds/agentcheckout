@@ -75,13 +75,11 @@ const tools: Anthropic.Tool[] = [
 // -- Tool execution handlers --
 
 function handleSearchProducts(input: { query: string; max_price?: number }): string {
-  const query = input.query.toLowerCase();
-  let results = PRODUCTS.filter(
-    (p) =>
-      p.name.toLowerCase().includes(query) ||
-      p.category.toLowerCase().includes(query) ||
-      p.desc.toLowerCase().includes(query)
-  );
+  const queryWords = input.query.toLowerCase().split(/\s+/);
+  let results = PRODUCTS.filter((p) => {
+    const haystack = `${p.name} ${p.category} ${p.desc}`.toLowerCase();
+    return queryWords.some((word) => haystack.includes(word));
+  });
   if (input.max_price) {
     results = results.filter((p) => p.price <= input.max_price!);
   }
@@ -167,7 +165,7 @@ export async function* runAgent(
   try {
     for (let turn = 0; turn < maxTurns; turn++) {
       const response = await client.messages.create({
-        model: "claude-sonnet-4-5-20250514",
+        model: "claude-sonnet-4-5-20250929",
         max_tokens: 1024,
         system:
           "You are a shopping agent for an MCP-enabled D2C store. When a user tells you what to buy, search products, add the best match to cart, then call checkout. Use only product_ids returned by search_products — never invent IDs. Be decisive — pick the best match on first search, don't over-browse.",
